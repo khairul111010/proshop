@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/khairul111010/proshop#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "concurrently": "^7.0.0",
     "dotenv": "^14.2.0",
