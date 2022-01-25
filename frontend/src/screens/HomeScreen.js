@@ -1,30 +1,34 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Row, Col } from "react-bootstrap";
 import Product from "../components/Product";
-import axios from "axios";
+import { listProduct } from "../actions/productActions";
 
 const HomeScreen = () => {
-  const [products, setProducts] = useState([]);
-
+  const dispatch = useDispatch();
+  const productList = useSelector((state) => state.productList);
+  const { loading, products, error } = productList;
   //component didMount
   useEffect(() => {
-    const fetchProducts = async () => {
-      const { data } = await axios.get("/api/products");
-      setProducts(data);
-    };
-    fetchProducts();
-  }, []); // this part does the trigger to fireoffs useEffects
+    dispatch(listProduct());
+  }, [dispatch]); // this part does the trigger to fireoffs useEffects
 
   return (
     <>
       <h1>Latest Products</h1>
-      <Row>
-        {products.map((product) => (
-          <Col sm={12} md={6} lg={4} xl={3}>
-            <Product key={product._id} product={product} />
-          </Col>
-        ))}
-      </Row>
+      {loading ? (
+        <h2>Loading</h2>
+      ) : error ? (
+        <h3>{error} </h3>
+      ) : (
+        <Row>
+          {products.map((product) => (
+            <Col sm={12} md={6} lg={4} xl={3}>
+              <Product key={product._id} product={product} />
+            </Col>
+          ))}
+        </Row>
+      )}
     </>
   );
 };
